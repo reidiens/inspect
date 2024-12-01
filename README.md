@@ -1,8 +1,3 @@
-# elfhead
-### View the contents of an ELF header
+# Filemeta
+### View detailed information on a file.
 <hr>
-
-It's basically readelf -h. It's unfinished for now.
-
-Just compile it however you want it's a 1 file program like.
-
