@@ -4,5 +4,5 @@
 
 It's basically readelf -h. It's unfinished for now.
 
-Just run `make` to build.
+Just compile it however you want it's a 1 file program like.
 
