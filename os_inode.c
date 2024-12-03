@@ -1,5 +1,6 @@
 #include "os_inode.h"
 
+#include <complex.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -110,7 +111,7 @@ char* ret_ftype(mode_t mode) {
     switch (mode & __S_IFMT) {
         case __S_IFDIR: return "Directory";
         case __S_IFBLK: return "Block device";
-        case __S_IFCHR: return "Character device";
+        case __S_IFCHR: return "Char. device";
         case __S_IFREG: return "Regular file";
         case __S_IFIFO: return "Pipe/FIFO";
         case __S_IFSOCK: return "Socket";
@@ -119,8 +120,39 @@ char* ret_ftype(mode_t mode) {
     }
 }
 
-void pr_type(mode_t mode) {
-    printf("Type:\t\t\t%s\n", ret_ftype(mode));
+void pr_type(struct stat *fstat) {
+    printf("Type:\t\t\t%s\n", ret_ftype(fstat->st_mode));
+    if (S_ISBLK(fstat->st_mode) || S_ISCHR(fstat->st_mode)) 
+        printf("Dev. ID:\t\t%ld\n", fstat->st_rdev);
+}
+
+void pr_permissions(mode_t mode) {
+    printf("Permissions:\t\t");
+    int bits = mode;
+    for (int i = 0; i < 3; i++) {
+        bits = mode;
+        bits &= 0x1C0 >> (3 * i);
+        bits = bits << (3 * i);
+        for (int k = 0; k < 3; k++) {
+            if ((bits & 0x100) == 0x100) {
+                switch (k) {
+                    case 0:
+                        printf("r");
+                        break;
+                    case 1:
+                        printf("w");
+                        break;
+                    case 2:
+                        printf("x");
+                        break;
+                    default: break;
+                }
+            }
+            else printf("-");
+            bits = bits << 1;
+        }
+    }
+    printf("\n");
 }
 
 void pr_size(size_t size) {
@@ -142,8 +174,7 @@ void print_inode_info(const char *fname, struct stat *fstat) {
     pr_inode(fstat->st_ino);
     pr_home(fstat->st_dev);
     pr_owners(fstat->st_uid, fstat->st_gid); 
-    pr_type(fstat->st_mode);
-    if (S_ISBLK(fstat->st_mode) || S_ISCHR(fstat->st_mode))
-    // print device id 
+    pr_type(fstat);
+    pr_permissions(fstat->st_mode);
     pr_size(fstat->st_size);
 }
