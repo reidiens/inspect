@@ -14,7 +14,8 @@ void pr_home(dev_t dev);
 void pr_uid(uid_t uid);
 void pr_gid(gid_t gid);
 void pr_owners(uid_t uid, gid_t gid);
-void pr_type(mode_t mode);
+void pr_type(struct stat *fstat);
+void pr_permissions(mode_t mode);
 void print_inode_info(const char *fname, struct stat *fstat);
 
 #endif

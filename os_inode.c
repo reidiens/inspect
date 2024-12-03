@@ -143,5 +143,7 @@ void print_inode_info(const char *fname, struct stat *fstat) {
     pr_home(fstat->st_dev);
     pr_owners(fstat->st_uid, fstat->st_gid); 
     pr_type(fstat->st_mode);
+    if (S_ISBLK(fstat->st_mode) || S_ISCHR(fstat->st_mode))
+    // print device id 
     pr_size(fstat->st_size);
 }
