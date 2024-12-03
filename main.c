@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
             return errno;
         }
     }
-    print_inode_info(&fstat);
+    print_inode_info(argv[1], &fstat);
 }
 
 void usage() {

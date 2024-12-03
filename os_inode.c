@@ -6,6 +6,59 @@
 #include <pwd.h>
 #include <grp.h>
 #include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+
+void pr_path(const char *fname) {
+    printf("Path: ");
+    if (fname[0] == '/') {
+        printf("%s\n\n", fname);
+        return;
+    }
+    else if (!strncmp(fname, "..", 2) || !strncmp(fname, "./", 2)) {
+        char *p = realpath(fname, NULL);
+        if (!p) {
+            if (errno == EACCES) {
+                puts("Permission denied\n");
+                return;
+            }
+            else return;
+        }
+        printf("%s\n\n", p);
+        free(p);
+        return;
+    }
+    size_t psize = (4096 + (strlen(fname) + 1)) * sizeof(char);
+    char *path = malloc(psize);
+    if (!path) {
+        perror("Malloc");
+        exit(errno);
+    }
+    path = getcwd(path, psize);
+    if (path == NULL) {
+        if (errno == EACCES) puts("Permission denied\n");
+        else if (errno == ERANGE) {
+            do {
+                psize *= 2;
+                path = realloc(path, psize);
+                if (!path) {
+                    perror("Realloc");
+                    exit(errno);
+                }
+                path = getcwd(path, psize);
+            } while (path == NULL && errno == ERANGE);
+        }
+        else {
+            perror("Getcwd");
+            exit(errno);
+        }
+    }
+    strcat(path, "/");
+    strcat(path, fname);
+    printf("%s\n\n", path);
+    free(path);
+}
 
 void pr_inode(ino_t ino) {
     printf("Inode:\t\t\t%ld\n", ino);
@@ -84,7 +137,8 @@ void pr_size(size_t size) {
         printf("%lu\n", size);
 }
 
-void print_inode_info(struct stat *fstat) {
+void print_inode_info(const char *fname, struct stat *fstat) {
+    pr_path(fname);
     pr_inode(fstat->st_ino);
     pr_home(fstat->st_dev);
     pr_owners(fstat->st_uid, fstat->st_gid); 
