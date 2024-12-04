@@ -1,6 +1,6 @@
 #include "os_inode.h"
 
-#include <complex.h>
+#include <dirent.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -17,7 +17,7 @@ void pr_path(const char *fname) {
         printf("%s\n\n", fname);
         return;
     }
-    else if (!strncmp(fname, "..", 2) || !strncmp(fname, "./", 2)) {
+    else if (fname[0] == '.' && (fname[1] == '/' || fname[1] == '.')) {
         char *p = realpath(fname, NULL);
         if (!p) {
             if (errno == EACCES) {
@@ -122,8 +122,40 @@ char* ret_ftype(mode_t mode) {
 
 void pr_type(struct stat *fstat) {
     printf("Type:\t\t\t%s\n", ret_ftype(fstat->st_mode));
-    if (S_ISBLK(fstat->st_mode) || S_ISCHR(fstat->st_mode)) 
+    if (S_ISBLK(fstat->st_mode) || S_ISCHR(fstat->st_mode)) {
         printf("Dev. ID:\t\t%ld\n", fstat->st_rdev);
+    }
+}
+
+void get_entcount(const char *fname) {
+    printf("# of entries:\t\t");
+    int count = 0;
+    DIR *d = opendir(fname);
+    if (!d) {
+        if (errno == EACCES) {
+            printf("Permission denied\n");
+            return;
+        }
+        else if (errno == ELOOP) {
+            printf("Unknown (symlink loop)\n");
+            return;
+        }
+        else {
+            perror("");
+            return;
+        }
+    } 
+    struct dirent *ent;
+    while ((ent = readdir(d)) != NULL) {
+        if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, "..")) continue;
+        if (ent->d_type == DT_REG || ent->d_type == DT_DIR || ent->d_type == DT_LNK)
+            count++;
+    }
+    printf("%d\n", count);
+}
+
+void pr_blksize(size_t blksize) {
+    printf("Block size:\t\t%ld\n", blksize);
 }
 
 void pr_permissions(mode_t mode) {
@@ -175,6 +207,8 @@ void print_inode_info(const char *fname, struct stat *fstat) {
     pr_home(fstat->st_dev);
     pr_owners(fstat->st_uid, fstat->st_gid); 
     pr_type(fstat);
+    if (S_ISDIR(fstat->st_mode))
+        get_entcount(fname);
     pr_permissions(fstat->st_mode);
     pr_size(fstat->st_size);
 }
