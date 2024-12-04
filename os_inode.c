@@ -151,6 +151,7 @@ void get_entcount(const char *fname) {
         if (ent->d_type == DT_REG || ent->d_type == DT_DIR || ent->d_type == DT_LNK)
             count++;
     }
+    closedir(d);
     printf("%d\n", count);
 }
 
