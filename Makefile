@@ -5,6 +5,6 @@ BIN = inspect
 
 ${BIN} : ${SRC}
 	${CC} ${SRC} ${FLAGS} ${BIN}
-	cp ${BIN} ~/.bin/i
-	mv ${BIN} ~/.bin
+	cp ${BIN} /usr/bin/i 
+	mv ${BIN} /usr/bin/ 
 	
