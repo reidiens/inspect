@@ -9,7 +9,7 @@ To build, simply use `make`.
 The executable will automatically be placed in `~/.bin`
 
 ### Usage
-`i <filename`
+`i <filename>`
 
 `inspect <filename>`
 
