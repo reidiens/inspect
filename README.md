@@ -1,7 +1,10 @@
 # Inspect
 ### Inspect the details of a file
 <hr>
-This project is far from finished, but is in a usable state (for now).
+View details about any file on a Linux system including block & character devices, directories, and symbolic links.
+
+In the future I plan to expand `inspect`'s functionality by adding filetype recognition and having it be able to output detailed information about the file's contents.
+For example, being able to view song length, author, and album name for an mp3 or the magic number, section headers, and program headers of an ELF file.
 
 ### Building
 To build, simply use `make`.
