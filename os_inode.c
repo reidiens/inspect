@@ -129,7 +129,7 @@ void pr_type(struct stat *fstat) {
 
 void get_entcount(const char *fname) {
     printf("# of entries:\t\t");
-    int count = 0;
+    int count = 0, hidden = 0;
     DIR *d = opendir(fname);
     if (!d) {
         if (errno == EACCES) {
@@ -148,11 +148,15 @@ void get_entcount(const char *fname) {
     struct dirent *ent;
     while ((ent = readdir(d)) != NULL) {
         if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, "..")) continue;
-        if (ent->d_type == DT_REG || ent->d_type == DT_DIR || ent->d_type == DT_LNK)
+        if (ent->d_type == DT_REG || ent->d_type == DT_DIR || ent->d_type == DT_LNK) {
             count++;
+            if (ent->d_name[0] == '.') hidden++;
+        }
     }
     closedir(d);
-    printf("%d\n", count);
+    printf("%d", count);
+    if (hidden != 0) printf(" (%d hidden)", hidden);
+    printf("\n");
 }
 
 void pr_blksize(size_t blksize) {
