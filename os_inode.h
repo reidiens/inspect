@@ -1,11 +1,16 @@
 #ifndef _F_OS_INODE_
     #define _F_OS_INODE_
 
+
+#include <dirent.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <pwd.h>
 #include <grp.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 
 void pr_path(const char *fname);
