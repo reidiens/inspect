@@ -7,9 +7,9 @@ In the future I plan to expand `inspect`'s functionality by adding filetype reco
 For example, being able to view song length, author, and album name for an mp3 or the magic number, section headers, and program headers of an ELF file.
 
 ### Building
-To build, simply use `make`.
+To build, simply run `sudo make`.
 
-The executable will automatically be placed in `~/.bin`
+The executable will automatically be placed in `/usr/bin`
 
 ### Usage
 `i <filename>`
