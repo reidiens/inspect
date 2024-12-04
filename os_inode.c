@@ -203,7 +203,7 @@ void pr_size(size_t size) {
     else if (size > (mb * 1024))
         printf("%.2fG\n", (float)size / (mb * 1024));
     else
-        printf("%lu\n", size);
+        printf("%lu bytes\n", size);
 }
 
 void print_inode_info(const char *fname, struct stat *fstat) {
