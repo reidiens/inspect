@@ -1,4 +1,4 @@
-#include "os_inode.h"
+#include "inode.h"
 
 #include <dirent.h>
 #include <stdio.h>

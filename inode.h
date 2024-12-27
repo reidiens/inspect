@@ -1,5 +1,5 @@
-#ifndef _F_OS_INODE_
-    #define _F_OS_INODE_
+#ifndef _I_INODE_
+    #define _I_INODE_
 
 
 #include <dirent.h>
@@ -12,6 +12,12 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+typedef struct Inode_Info {
+    char *path;
+    char *fname;
+    
+} inode_inf_t;
 
 void pr_path(const char *fname);
 void pr_inode(ino_t ino);
