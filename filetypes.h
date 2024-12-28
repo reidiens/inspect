@@ -1,23 +1,34 @@
 #ifndef _FILETYPES_H_
     #define _FILETYPES_H_
 
-#define NMAGICNUMS      3
-
-#define FT_ELF          0
-#define FT_PNG          1
-#define FT_PDF          2
-
+#include <stdbool.h>
+#include <sys/stat.h>
 #include <stdio.h>
+#include <assert.h>
 
-typedef struct FileInfo {
+#define FT_UNKNOWN  0
+#define FT_ELF      1
+#define FT_PNG      2
+#define FT_PDF      3
+
+#define ELF_MAG_LEN     4
+#define PNG_MAG_LEN     8
+#define PDF_MAG_LEN     8
+
+typedef struct File_Info {
+    const char *fname;
     FILE *fp;
-    int ftype;
-    char *magic;
-} file_t;
+    struct stat fstat;
+    int filetype;
+    bool isdir;
+} file_inf;
 
-#define FT_ELF      0
-#define FT_PNG      1
+bool ft_is_elf(FILE *fp);
+bool ft_is_png(FILE *fp);
+bool ft_is_pdf(FILE *fp);
 
-file_t* open_file(const char *fname);
+int ft_determine_filetype(FILE *fp);
+
+file_inf ft_get_file_info(const char *fname);
 
 #endif
