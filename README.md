@@ -15,5 +15,3 @@ The executable will automatically be placed in `/usr/bin`
 `i <filename>`
 
 `inspect <filename>`
-
-![A screenshot of the program output](img/screenshot.png "The inspected contents of a file")
