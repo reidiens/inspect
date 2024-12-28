@@ -52,10 +52,36 @@ bool ft_is_pdf(FILE *fp) {
     return false;
 }
 
+bool ft_is_gzip(FILE *fp) {
+    fseek(fp, 0, SEEK_SET);
+
+    char gzip_mag[GZIP_MAG_LEN] = {0x1f, 0x8b};
+    char buf[GZIP_MAG_LEN];
+    fread(buf, sizeof(buf), 1, fp);
+
+    for (int i = 0; i < GZIP_MAG_LEN; i++)
+        if (buf[i] != gzip_mag[i]) return false;
+    return true;
+}
+
+bool ft_is_pkzip(FILE *fp) {
+    fseek(fp, 0, SEEK_SET);
+
+    char pkz_mag[PKZIP_MAG_LEN] = {'P', 'K', 0x03, 0x04};
+    char buf[PKZIP_MAG_LEN];
+    fread(buf, sizeof(buf), 1, fp);
+
+    for (int i = 0; i < PKZIP_MAG_LEN; i++) 
+        if (buf[i] != pkz_mag[i]) return false;
+    return true;
+}
+
 int ft_determine_filetype(FILE *fp) {
     if (ft_is_elf(fp)) return FT_ELF;
     if (ft_is_png(fp)) return FT_PNG;
     if (ft_is_pdf(fp)) return FT_PDF;
+    if (ft_is_gzip(fp)) return FT_GZIP;
+    if (ft_is_pkzip(fp)) return FT_PKZIP;
     return FT_UNKNOWN; /* always return a value */
 }
 

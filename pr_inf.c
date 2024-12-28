@@ -238,13 +238,19 @@ void pr_filetype(int filetype) {
     printf("File type:\t\t");
     switch (filetype) {
         case FT_ELF:
-            printf("Elf\n");
+            printf("ELF\n");
             break;
         case FT_PNG:
             printf("PNG\n");
             break;
         case FT_PDF:
             printf("PDF\n");
+            break;
+        case FT_GZIP:
+            printf("gzip\n");
+            break;
+        case FT_PKZIP:
+            printf("ZIP\n");
             break;
         default: printf("Unknown\n");
     };
