@@ -1,6 +1,6 @@
 CC = gcc
 SRC = *.c
-FLAGS = -Wall -O2 -o
+FLAGS = -Wall -O2 -o 
 BIN = inspect
 
 ${BIN} : ${SRC}
